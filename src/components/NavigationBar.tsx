@@ -1,26 +1,43 @@
+import React from "react";
+
 import Drawer from "@mui/material/Drawer";
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
 import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
+import GroupIcon from "@material-ui/icons/Group";
+import UserIcon from "@material-ui/icons/Person";
 import Toolbar from "@mui/material/Toolbar";
 
 //@ts-ignore
 import EventBus from "header/EventBus";
 
 const NavigationBar = () => {
+  const [open, setOpen] = React.useState(true);
+
+  console.log("render NavigationBar", open)
+  function toggle() {
+    // must use the callback syntax of setting state
+    setOpen(open => !open);
+  };
+
   const handleClick = (text: any) => (event: any) => {
     EventBus.dispatch("NavigationSelectEvent", text);
   };
+
+  React.useEffect(() => {
+    EventBus.subscribe("AppBarSelectEvent", 
+      toggle
+    );
+  }, []);
+
   return (
     <Drawer
-      variant="permanent"
+      variant="persistent"
+      open={open}
       sx={{
-        width: 300,
+        width: open ? 300 : 'unset',
         flexShrink: 0,
         [`& .MuiDrawer-paper`]: {
           width: 300,
@@ -31,25 +48,18 @@ const NavigationBar = () => {
       <Toolbar />
       <Box sx={{ overflow: "auto" }}>
         <List>
-          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-            <ListItem button key={text} onClick={handleClick(text)}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {["All mail", "Trash", "Spam"].map((text, index) => (
-            <ListItem button key={text} onClick={handleClick("text")}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
+          <ListItem button key="Users" onClick={handleClick("Users")}>
+            <ListItemIcon>
+              <UserIcon />
+            </ListItemIcon>
+            <ListItemText primary="Users" />
+          </ListItem>
+          <ListItem button key="Groups" onClick={handleClick("Groups")}>
+            <ListItemIcon>
+              <GroupIcon />
+            </ListItemIcon>
+            <ListItemText primary="Groups" />
+          </ListItem>
         </List>
       </Box>
     </Drawer>

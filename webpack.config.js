@@ -30,7 +30,7 @@ module.exports = {
     new ModuleFederationPlugin({
       name: "navbar",
       library: { type: "var", name: "navbar" },
-      filename: "navbar.js",
+      filename: "navbarRemoteEntry.js",
       remotes: {
         header: "header",
       },
