@@ -15,6 +15,7 @@ import EventBus from "header/EventBus";
 
 const NavigationBar = () => {
   const [open, setOpen] = React.useState(true);
+  const [selected, setSelected] = React.useState("Users");
 
   console.log("render NavigationBar", open)
   function toggle() {
@@ -24,6 +25,7 @@ const NavigationBar = () => {
 
   const handleClick = (text: any) => (event: any) => {
     EventBus.dispatch("NavigationSelectEvent", text);
+    setSelected(text);
   };
 
   React.useEffect(() => {
@@ -48,13 +50,13 @@ const NavigationBar = () => {
       <Toolbar />
       <Box sx={{ overflow: "auto" }}>
         <List>
-          <ListItem button key="Users" onClick={handleClick("Users")}>
+          <ListItem button key="Users" onClick={handleClick("Users")} selected={selected === "Users"}>
             <ListItemIcon>
               <UserIcon />
             </ListItemIcon>
             <ListItemText primary="Users" />
           </ListItem>
-          <ListItem button key="Groups" onClick={handleClick("Groups")}>
+          <ListItem button key="Groups" onClick={handleClick("Groups")} selected={selected === "Groups"}>
             <ListItemIcon>
               <GroupIcon />
             </ListItemIcon>
